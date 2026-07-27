@@ -7,7 +7,7 @@ return(
       
     </nav>
     <Routes>
-      <Route></Route>
+      <Route path="/" element={<Login/>}>Login</Route>
     </Routes>
   </>
 )
