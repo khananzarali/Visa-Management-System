@@ -11,10 +11,20 @@ user: process.env.USER,
   port: process.env.DATABASE_PORT,
 })
 
-app.post('\login',(req,res)=>{
+app.post('/login',(req,res)=>{
     const {username,password}=req.body;
-    
-
+    try {
+        const result="SELECT * from user WHERE username=$1",[username];
+        const row=result.rows[0];
+        if(!row){
+            console.log('user not found');
+        }
+        if(row.password!=password){
+            console.log('incorrect password');
+        }
+    } catch (error) {
+        
+    }
 })
 
 app.listen(5000,()=>{
