@@ -55,6 +55,35 @@ app.post("/login", async (req, res) => {
   }
 });
 
+// Middleware to authenticate JWT
+const authenticateToken = (req, res, next) => {
+  // Middleware function. 'next()' tells Express to continue to the next middleware or route.
+  const authHeader = req.headers["authorization"];
+
+  // Get the JWT from the Authorization header.
+  // The header looks like: "Bearer <token>"
+  // split(" ")[1] extracts only the token.
+  const token = authHeader && authHeader.split(" ")[1];
+
+  // If no token was sent, stop the request and return a 401 Unauthorized response.
+  if (!token) return res.status(401).json({ message: "Access token missing" });
+
+  // Verify the token using the server's secret key.
+  // If valid, 'user' contains the decoded payload from the JWT.
+  jwt.verify(token, process.env.JWT_SECRET || "fallback_secret_key", (err, user) => {
+
+    // If verification fails (invalid, modified, or expired token), return a 403 Forbidden response.
+    if (err) return res.status(403).json({ message: "Invalid or expired token" });
+
+    // Store the decoded user information on the request object
+    // so the next middleware or route can access it.
+    req.user = user;
+
+    // Authentication succeeded, continue to the next middleware or route.
+    next();
+  });
+};
+
 app.listen(5000,()=>{
     console.log("server running at port 5000");
     
