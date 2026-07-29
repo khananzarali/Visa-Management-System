@@ -83,8 +83,17 @@ const authenticateToken = (req, res, next) => {
     next();
   });
 };
-
+app.post('api/writing',(res,req)=>{
+    if(user=="user"){
+      const result='SELECT stories FROM user'
+    }
+    else if(user='author'){
+      const result='SELECT stories FROM user WHERE role is author, admin=$1',[user_name];
+    }
+    else if(user=='admin'){
+      const result = 'SELECT * FROM users'
+    }
+});
 app.listen(5000,()=>{
     console.log("server running at port 5000");
-    
 })
