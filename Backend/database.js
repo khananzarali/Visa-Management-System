@@ -87,7 +87,7 @@ app.post('api/writing',(res,req)=>{
     if(user=="user"){
       const result='SELECT stories FROM user'
     }
-    else if(user='author'){
+    else if(user=='author'){
       const result='SELECT stories FROM user WHERE role is author, admin=$1',[user_name];
     }
     else if(user=='admin'){
